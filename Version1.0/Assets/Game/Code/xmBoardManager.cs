@@ -9,14 +9,15 @@ public class xmBoardManager : MonoBehaviour
     [SerializeField]
     public List<xmCube> m_nodeList = new List<xmCube>();
     public Transform thisT;
-    public float m_R = 2;//半径
-    public float m_Space = 1;//间隔
+    public float m_R = 2;//radius
+    public float m_Space = 1;//scape of each item
 
-    public int m_nodeNum = 4;//方块数量
-    public int m_circleItemNum = 14;
+    public int m_nodeNum = 4;//box num
+    public int m_circleItemNum = 14;//pre
     public static xmBoardManager Instance;
     public Vector3[] m_circlePosList;
     public Vector3[] m_linePosList;
+
     public enum ShapeType
     {
         Line,
@@ -48,6 +49,16 @@ public class xmBoardManager : MonoBehaviour
             m_nodeList.Add(a.GetComponent<xmCube>());
         }
     }
+	/// <summary>
+	///add new item to list.
+	/// </summary>
+	protected void AddItemToList()
+	{
+		GameObject a = Instantiate(Resources.Load("BoardItem")) as GameObject;
+		a.transform.parent = transform;
+		m_nodeList.Add(a.GetComponent<xmCube>()); 
+	}
+
     public void SetShapeType(ShapeType m)
     {
         switch (m)
@@ -237,16 +248,15 @@ public class xmBoardManager : MonoBehaviour
                 Gizmos.color = Color.gray;
             Gizmos.DrawSphere(m_circlePosList[i],.2f);
         }
-    }
-    void OnGUI()
-    {
-        if (GUILayout.Button("Update Line"))
-        {
-            UpdateLinePos();
-        }
-        if (GUILayout.Button("Update Circle"))
-        {
-            UpdateCirclePos();
-        }
-    }
+    } 
+
+	void OnGUI()
+	{
+		if(GUILayout.Button("Add Item"))
+		{
+			AddItemToList();
+			m_nodeNum+=1; 
+		}
+
+	}
 }
